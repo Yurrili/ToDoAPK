@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ToDo</string>
+    <string name="action_settings">Settings</string>
+    <string name="textholder">Lorem Ipsum</string>
+    # Links to font-awesome
+    <string name="fa_bitbucket">&#xf171;</string>
+    <string name="fa_plus">&#xf067;</string>
+</resources>
