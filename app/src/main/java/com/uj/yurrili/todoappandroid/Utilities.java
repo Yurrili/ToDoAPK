@@ -1,5 +1,9 @@
 package com.uj.yurrili.todoappandroid;
 
+import android.content.Context;
+import android.graphics.Typeface;
+import android.widget.TextView;
+
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -13,6 +17,8 @@ import java.sql.Timestamp;
  */
 public class Utilities {
 
+
+
     public static String convertTime(Timestamp date){
         DateTimeFormatter format = DateTimeFormat.forPattern("HH:mm yyyy-MM-dd ");
         return format.print(date.getTime());
@@ -25,4 +31,6 @@ public class Utilities {
     public static LocalDateTime sqlTimestampToJodaLocalDateTime(Timestamp timestamp) {
         return LocalDateTime.fromDateFields(timestamp);
     }
+
+
 }
