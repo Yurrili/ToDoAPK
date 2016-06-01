@@ -1,6 +1,5 @@
 package com.uj.yurrili.todoappandroid.objects;
 
-import java.net.URL;
 import java.sql.Timestamp;
 
 /**
@@ -15,6 +14,14 @@ public class Task {
 
     public Task(int id, String title, String description, String url_to_icon, Timestamp time_end) {
         this.id = id;
+        this.title = title;
+        this.description = description;
+        this.url_to_icon = url_to_icon;
+        this.time_end = time_end;
+    }
+
+    public Task( String title, String description, String url_to_icon, Timestamp time_end) {
+
         this.title = title;
         this.description = description;
         this.url_to_icon = url_to_icon;

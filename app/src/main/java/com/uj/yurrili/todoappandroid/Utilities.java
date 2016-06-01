@@ -1,12 +1,12 @@
 package com.uj.yurrili.todoappandroid;
 
-import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelper;
-import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelperImpl;
+import org.joda.time.LocalDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
-import java.sql.Date;
+
 import java.sql.Timestamp;
-import java.text.Format;
-import java.text.SimpleDateFormat;
+
 
 /**
  * Created by Yuri on 2016-06-01.
@@ -14,7 +14,15 @@ import java.text.SimpleDateFormat;
 public class Utilities {
 
     public static String convertTime(Timestamp date){
-        Format format = new SimpleDateFormat("HH:mm dd/MM/yyyy ");
-        return format.format(date);
+        DateTimeFormatter format = DateTimeFormat.forPattern("HH:mm yyyy-MM-dd ");
+        return format.print(date.getTime());
+    }
+
+    public static Timestamp jodaToSQLTimestamp(LocalDateTime localDateTime) {
+        return new Timestamp(localDateTime.toDateTime().getMillis());
+    }
+
+    public static LocalDateTime sqlTimestampToJodaLocalDateTime(Timestamp timestamp) {
+        return LocalDateTime.fromDateFields(timestamp);
     }
 }

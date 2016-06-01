@@ -15,7 +15,12 @@ import android.widget.ListAdapter;
 
 import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelper;
 import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelperImpl;
+import com.uj.yurrili.todoappandroid.db_managment.Entries;
 import com.uj.yurrili.todoappandroid.objects.Task;
+
+import net.danlew.android.joda.JodaTimeAndroid;
+
+import org.joda.time.LocalDateTime;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -33,9 +38,9 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        JodaTimeAndroid.init(this);
         dba_Task = new DataBaseHelperImpl(getApplicationContext());
-
+        dba_Task.insertTask(new Task("HaHA", null, null, Utilities.jodaToSQLTimestamp(LocalDateTime.now())));
 
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 

@@ -56,24 +56,25 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
         };
 
         //Download image using picasso library
-        if(feedItem.getUrl_to_icon()!= null)
+        if(feedItem.getUrl_to_icon()!= null) {
             Picasso.with(mContext)
                     .load(feedItem.getUrl_to_icon())
                     .into(holder.imageView);
+            holder.imageView.setTag(holder);
+        }
 
 
         holder.title.setText(feedItem.getTitle());
+        holder.title.setTag(holder);
+
         if(feedItem.getTime_end().getTime() >0) {
             holder.timestamp.setText(Utilities.convertTime(feedItem.getTime_end()));
             holder.timestamp.setTag(holder);
         }
 
-//        holder.textView.setOnClickListener(clickListener);
-////        holder.imageView.setOnClickListener(clickListener);
 
 
-        holder.title.setTag(holder);
-//        holder.imageView.setTag(holder);
+
     }
 
     @Override

@@ -7,7 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.uj.yurrili.todoappandroid.Utilities;
 import com.uj.yurrili.todoappandroid.objects.Task;
+
+import net.danlew.android.joda.JodaTimeAndroid;
+
+import org.joda.time.LocalDateTime;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -42,7 +47,7 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
         db.insert(Entries.Task.TABLE_NAME, null, values);
 
         values.put(Entries.Task.COLUMN_TITLE, "App for GameDesire");
-        values.put(Entries.Task.COLUMN_TIME_END, "1464790674");
+        values.put(Entries.Task.COLUMN_TIME_END, "1464794982");
         values.put(Entries.Task.COLUMN_URL_TO_ICON, "https://j7w7h8q2.ssl.hwcdn.net/achievements/ach_ipad/6.10.png");
         db.insert(Entries.Task.TABLE_NAME, null, values);
     }
@@ -63,7 +68,7 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
         values.put(Entries.Task.COLUMN_TITLE, task.getTitle());
         values.put(Entries.Task.COLUMN_DESCRIPTION, task.getDescription());
         values.put(Entries.Task.COLUMN_TIME_END, timestamp);
-        values.put(Entries.Task.COLUMN_URL_TO_ICON, task.getUrl_to_icon().toString());
+        values.put(Entries.Task.COLUMN_URL_TO_ICON, task.getUrl_to_icon());
 
         dba.insert(Entries.Task.TABLE_NAME, null, values);
         dba.close();
@@ -87,7 +92,7 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
         values.put(Entries.Task.COLUMN_TITLE, task.getTitle());
         values.put(Entries.Task.COLUMN_DESCRIPTION, task.getDescription());
         values.put(Entries.Task.COLUMN_TIME_END, timestamp);
-        values.put(Entries.Task.COLUMN_URL_TO_ICON, task.getUrl_to_icon().toString());
+        values.put(Entries.Task.COLUMN_URL_TO_ICON, task.getUrl_to_icon());
 
 
         dba.update(Entries.Task.TABLE_NAME, values, Entries.Task._ID + "='" + task.getId() + "'", null);
@@ -111,6 +116,9 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
                     new Timestamp(c.getLong(4)) // TIMESTAMP
             );
         }
+
+        c.close();
+        dba.close();
         return null;
     }
 
