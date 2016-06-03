@@ -67,4 +67,8 @@ public class Utilities {
         }
         return d + "/" + m +  "/" + year;
     }
+
+    public static String setTimePick(int hourOfDay, int minute) {
+        return hourOfDay +  ":" + minute;
+    }
 }

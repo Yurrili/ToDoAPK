@@ -1,14 +1,12 @@
 package com.uj.yurrili.todoappandroid;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.graphics.Typeface;
+
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,20 +16,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ListAdapter;
-import android.widget.TextView;
+
 
 import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelper;
 import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelperImpl;
-import com.uj.yurrili.todoappandroid.db_managment.Entries;
 import com.uj.yurrili.todoappandroid.objects.Task;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
-import org.joda.time.LocalDateTime;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -45,8 +40,10 @@ public class ListActivity extends AppCompatActivity {
     DataBaseHelper dba_Task;
     @InjectView(R.id.rv) RecyclerView mRecyclerView;
     @InjectView(R.id.toolbar) Toolbar toolbar;
+
     private RecyclerView.Adapter mAdapter;
     private Paint p = new Paint();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +63,7 @@ public class ListActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.fab) void startAddActivity() {
-        Intent intent = new Intent(getApplicationContext(), AddEditActivity.class);
+        Intent intent = new Intent(this, AddEditActivity.class);
         startActivity(intent);
     }
 

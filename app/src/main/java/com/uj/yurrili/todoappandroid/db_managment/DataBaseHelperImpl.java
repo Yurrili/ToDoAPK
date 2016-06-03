@@ -67,8 +67,11 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
     @Override
     public void insertTask(Task task) {
         SQLiteDatabase dba = this.getWritableDatabase();
+        Long timestamp = null;
 
-        Long timestamp = task.getTime_end().getTime();
+        if(task.getTime_end() != null) {
+            timestamp = task.getTime_end().getTime();
+        }
 
         ContentValues values = new ContentValues();
 

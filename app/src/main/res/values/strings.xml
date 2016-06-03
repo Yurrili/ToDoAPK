@@ -1,13 +1,15 @@
 <resources>
     <string name="app_name">ToDo</string>
     <string name="action_settings">Settings</string>
-
+    <string name="task_new">New Task</string>
+    <string name="font_place">font/fontawesome-webfont.ttf</string>
     # Links to font-awesome
     <string name="fa_clock_o">&#xf017;</string>
     <string name="fa_bitbucket">&#xf171;</string>
     <string name="fa_plus">&#xf067;</string>
     <string name="fa_tasks">&#xf0ae;</string>
     <string name="fa_calendar">&#xf073;</string>
+    <string name="fa_eraser">&#xf12d;</string>
     # Placeholders and texts
     <string name="hint_title">Title</string>
     <string name="hint_description">Description</string>
@@ -15,6 +17,7 @@
     <string name="btn_add">Add</string>
     <string name="date">12/07/2015</string>
     <string name="time">15:35</string>
+    <string name="double_dots">:</string>
     # Descriptions of images
     <string name="image_badge_desc">Custom user image of task</string>
 

@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:fitsSystemWindows="true"
     tools:context="com.uj.yurrili.todoappandroid.AddEditActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
+        android:layout_gravity="center_vertical"
         android:orientation="vertical"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
@@ -57,43 +70,70 @@
                 android:hint="@string/hint_url" />
         </android.support.design.widget.TextInputLayout>
 
-        <LinearLayout
+        <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:layout_gravity="center_vertical"
+
+            android:columnCount="5"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/awesome_font_clock"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="4dp"
-                android:text="@string/fa_clock_o" />
-
-            <TextView
-                android:id="@+id/time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="@string/time" />
-
-            <TextView
                 android:id="@+id/awesome_font_calendar"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:textSize="20sp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="9dp"
+                android:layout_column="0"
                 android:text="@string/fa_calendar" />
 
-            <TextView
+            <EditText
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:focusable="false"
                 android:layout_marginStart="5dp"
-                android:text="@string/date" />
+                android:layout_column="1"
+                android:textSize="20sp"
+                android:inputType="date"
+                android:hint="@string/date" />
 
-        </LinearLayout>
+
+            <TextView
+                android:id="@+id/awesome_font_clock"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="4dp"
+                android:layout_column="2"
+                android:layout_marginStart="15dp"
+                android:textSize="20sp"
+                android:text="@string/fa_clock_o" />
+
+            <EditText
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="20sp"
+                android:focusable="false"
+                android:inputType="time"
+                android:layout_column="3"
+                android:hint="@string/time" />
+
+            <TextView
+                android:id="@+id/awesome_font_eraser"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="2dp"
+                android:textSize="20sp"
+                android:layout_gravity="end|center_vertical"
+                android:textColor="@color/colorPrimary"
+                android:text="@string/fa_eraser" />
+
+        </GridLayout>
 
 
 
@@ -107,4 +147,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

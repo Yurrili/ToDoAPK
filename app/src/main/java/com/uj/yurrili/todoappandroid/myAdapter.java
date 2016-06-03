@@ -44,7 +44,8 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
         this.items = items;
         this.mContext = context;
         this.listener = listener;
-        this.typeFace = Typeface.createFromAsset(mContext.getAssets(), "font/fontawesome-webfont.ttf");
+        this.typeFace = Typeface.createFromAsset(mContext.getAssets(),
+                mContext.getResources().getString(R.string.font_place));
     }
 
     @Override
