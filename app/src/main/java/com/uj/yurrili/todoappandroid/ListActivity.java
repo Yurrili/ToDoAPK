@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListAdapter;
+import android.widget.TextView;
 
 import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelper;
 import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelperImpl;
@@ -35,35 +36,47 @@ import org.joda.time.LocalDateTime;
 import java.net.MalformedURLException;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
 public class ListActivity extends AppCompatActivity {
 
     DataBaseHelper dba_Task;
-    private RecyclerView mRecyclerView;
+    @InjectView(R.id.rv) RecyclerView mRecyclerView;
+    @InjectView(R.id.toolbar) Toolbar toolbar;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private Paint p = new Paint();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.inject(this);
         setSupportActionBar(toolbar);
         JodaTimeAndroid.init(this);
-
         dba_Task = new DataBaseHelperImpl(getApplicationContext());
-//        dba_Task.insertTask(new Task("HaHA", null, null, Utilities.jodaToSQLTimestamp(LocalDateTime.now())));
+        initRecyclerView();
+        initFloatingActionButton();
+    }
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv);
+    private void initFloatingActionButton(){
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_plus));
+    }
+
+    @OnClick(R.id.fab) void startAddActivity() {
+        Intent intent = new Intent(getApplicationContext(), AddEditActivity.class);
+        startActivity(intent);
+    }
 
 
+    private void initRecyclerView(){
         mRecyclerView.setHasFixedSize(true);
-
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 return false;
@@ -78,21 +91,15 @@ public class ListActivity extends AppCompatActivity {
 
             @Override
             public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-
                 if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE){
-
                     View itemView = viewHolder.itemView;
-
-                        p.setColor(Color.parseColor("#EF5350"));
-                        RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
-                        c.drawRect(background, p);
-
-
+                    p.setColor(Color.parseColor("#EF5350"));
+                    RectF background = new RectF((float) itemView.getRight() + dX, (float) itemView.getTop(),(float) itemView.getRight(), (float) itemView.getBottom());
+                    c.drawRect(background, p);
                 }
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
         };
-
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
 
@@ -108,35 +115,26 @@ public class ListActivity extends AppCompatActivity {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        mRecyclerView.setAdapter(mAdapter);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_plus));
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), AddEditActivity.class);
-                startActivity(intent);
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_list, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch(id) {
+            case R.id.action_Back_up_export:
+                return true;
+            case R.id.action_Back_up_import:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 }

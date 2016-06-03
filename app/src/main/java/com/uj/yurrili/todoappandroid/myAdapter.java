@@ -3,18 +3,20 @@ package com.uj.yurrili.todoappandroid;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.uj.yurrili.todoappandroid.objects.Task;
 
 import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Created by Yuri on 2016-06-01.
@@ -42,15 +44,14 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
         this.items = items;
         this.mContext = context;
         this.listener = listener;
-        typeFace = Typeface.createFromAsset(mContext.getAssets(), "font/fontawesome-webfont.ttf");
+        this.typeFace = Typeface.createFromAsset(mContext.getAssets(), "font/fontawesome-webfont.ttf");
     }
 
     @Override
     public myAdapter.CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.my_text_view, viewGroup, false);
-        CustomViewHolder viewHolder = new CustomViewHolder(view);
-        return viewHolder;
+        return new CustomViewHolder(view);
     }
 
     @Override
@@ -64,50 +65,50 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
-        protected ImageView imageView;
-        protected TextView title;
-        protected TextView timestamp;
-        protected TextView fontAwesomeClock;
-        protected TextView fontAwesomeCalendar;
+        @InjectView(R.id.image) ImageView imageView;
+        @InjectView(R.id.title) TextView title;
+        @InjectView(R.id.time) TextView timePlace;
+        @InjectView(R.id.date) TextView datePlace;
+        @InjectView(R.id.awesome_font_clock) TextView fontAwesomeClock;
+        @InjectView(R.id.awesome_font_calendar) TextView fontAwesomeCalendar;
+
         public CustomViewHolder(View view) {
             super(view);
-            this.imageView = (ImageView) view.findViewById(R.id.image);
-            this.title = (TextView) view.findViewById(R.id.title);
-            this.timestamp = (TextView) view.findViewById(R.id.time);
-            this.fontAwesomeClock = (TextView) view.findViewById(R.id.awesome_font_cal);
-            this.fontAwesomeCalendar = (TextView) view.findViewById(R.id.awesome_font_calendar);
+            ButterKnife.inject(this, view);
         }
 
         public void bind(final Task item, final OnItemClickListener listener) {
-
-            if(item.getUrl_to_icon()!= null) {
-                Picasso.with(mContext)
-                        .load(item.getUrl_to_icon())
-                        .into(imageView);
-                imageView.setBackground(mContext.getResources().getDrawable(R.drawable.ic_circle4));
-            } else {
-                imageView.setBackground(mContext.getResources().getDrawable(R.drawable.ic_circle4));
-            }
-
+            setImageView(item);
             title.setText(item.getTitle());
 
             if(item.getTime_end().getTime() > 0) {
-                timestamp.setText(Utilities.convertTime(item.getTime_end()));
+                Pair<String,String> datetime = Utilities.convertTime(item.getTime_end());
+                timePlace.setText(datetime.first);
+                datePlace.setText(datetime.second);
                 fontAwesomeCalendar.setTypeface(typeFace);
                 fontAwesomeClock.setTypeface(typeFace);
             } else {
+                timePlace.setVisibility(View.INVISIBLE);
+                datePlace.setVisibility(View.INVISIBLE);
                 fontAwesomeCalendar.setVisibility(View.INVISIBLE);
                 fontAwesomeClock.setVisibility(View.INVISIBLE);
             }
-
-
-
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     listener.onItemClick(item);
                 }
             });
+        }
+
+        private void setImageView(final Task item){
+            if(item.getUrl_to_icon()!= null) {
+                Picasso.with(mContext)
+                        .load(item.getUrl_to_icon())
+                        .into(imageView);
+            }
+            imageView.setBackground(mContext.getResources().getDrawable(R.drawable.ic_circle4));
+
         }
     }
 

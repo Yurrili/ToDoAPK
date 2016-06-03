@@ -3,8 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.uj.yurrili.todoappandroid.ListActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_Back_up_import"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/action_back_up_import"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_Back_up_export"
+        android:orderInCategory="100"
+        android:title="@string/action_back_up_export"
         app:showAsAction="never" />
 </menu>
