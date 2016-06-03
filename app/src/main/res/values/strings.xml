@@ -8,4 +8,14 @@
     <string name="fa_plus">&#xf067;</string>
     <string name="fa_tasks">&#xf0ae;</string>
     <string name="fa_calendar">&#xf073;</string>
+    <string name="btn_sign_up">Sign up</string>
+    <string name="hint_password">password</string>
+    <string name="hint_email">email</string>
+    <string name="hint_name">name</string>
+    <string name="hint_title">Title</string>
+    <string name="hint_description">Description</string>
+    <string name="hint_url">http://url_to_image</string>
+    <string name="btn_add">Add</string>
+    <string name="date">12/07/2015</string>
+    <string name="time">15:35</string>
 </resources>

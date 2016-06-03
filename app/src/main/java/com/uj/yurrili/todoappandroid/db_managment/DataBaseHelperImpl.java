@@ -31,6 +31,7 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
 
     public DataBaseHelperImpl (Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        JodaTimeAndroid.init(context);
     }
 
     @Override
@@ -42,13 +43,19 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
 
         values.put(Entries.Task.COLUMN_TITLE, "Paid for food");
         db.insert(Entries.Task.TABLE_NAME, null, values);
+        values.put(Entries.Task.COLUMN_URL_TO_ICON, "https://j7w7h8q2.ssl.hwcdn.net/achievements/ach_ipad/11.10.png");
 
         values.put(Entries.Task.COLUMN_TITLE, "Paid for gym");
         db.insert(Entries.Task.TABLE_NAME, null, values);
 
         values.put(Entries.Task.COLUMN_TITLE, "App for GameDesire");
-        values.put(Entries.Task.COLUMN_TIME_END, "1464794982");
+        values.put(Entries.Task.COLUMN_TIME_END, Utilities.jodaToSQLTimestamp(LocalDateTime.now()).getTime());
         values.put(Entries.Task.COLUMN_URL_TO_ICON, "https://j7w7h8q2.ssl.hwcdn.net/achievements/ach_ipad/6.10.png");
+        db.insert(Entries.Task.TABLE_NAME, null, values);
+
+        values.put(Entries.Task.COLUMN_TITLE, "App for STH");
+        values.put(Entries.Task.COLUMN_TIME_END, Utilities.jodaToSQLTimestamp(LocalDateTime.now()).getTime());
+        values.put(Entries.Task.COLUMN_URL_TO_ICON, "https://j7w7h8q2.ssl.hwcdn.net/achievements/ach_ipad/9.10.png");
         db.insert(Entries.Task.TABLE_NAME, null, values);
     }
 
@@ -68,6 +75,7 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
         values.put(Entries.Task.COLUMN_TITLE, task.getTitle());
         values.put(Entries.Task.COLUMN_DESCRIPTION, task.getDescription());
         values.put(Entries.Task.COLUMN_TIME_END, timestamp);
+        values.put(Entries.Task.COLUMN_TIMESTAMP, Utilities.jodaToSQLTimestamp(LocalDateTime.now()).getTime());
         values.put(Entries.Task.COLUMN_URL_TO_ICON, task.getUrl_to_icon());
 
         dba.insert(Entries.Task.TABLE_NAME, null, values);

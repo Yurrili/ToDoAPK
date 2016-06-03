@@ -29,6 +29,15 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
         void onItemClick(Task item);
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if(items.get(position).getUrl_to_icon()!= null) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     public myAdapter(Context context, List<Task> items, OnItemClickListener listener) {
         this.items = items;
         this.mContext = context;
@@ -58,14 +67,14 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
         protected ImageView imageView;
         protected TextView title;
         protected TextView timestamp;
-        protected TextView fontAwesomeTask;
+        protected TextView fontAwesomeClock;
         protected TextView fontAwesomeCalendar;
         public CustomViewHolder(View view) {
             super(view);
             this.imageView = (ImageView) view.findViewById(R.id.image);
             this.title = (TextView) view.findViewById(R.id.title);
             this.timestamp = (TextView) view.findViewById(R.id.timestamp);
-            this.fontAwesomeTask = (TextView) view.findViewById(R.id.awesome_font_task);
+            this.fontAwesomeClock = (TextView) view.findViewById(R.id.awesome_font_calen);
             this.fontAwesomeCalendar = (TextView) view.findViewById(R.id.awesome_font_calendar);
         }
 
@@ -85,11 +94,14 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
             if(item.getTime_end().getTime() > 0) {
                 timestamp.setText(Utilities.convertTime(item.getTime_end()));
                 fontAwesomeCalendar.setTypeface(typeFace);
+                fontAwesomeClock.setTypeface(typeFace);
             } else {
                 fontAwesomeCalendar.setVisibility(View.INVISIBLE);
+                fontAwesomeClock.setVisibility(View.INVISIBLE);
             }
 
-            fontAwesomeTask.setTypeface(typeFace);
+
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
