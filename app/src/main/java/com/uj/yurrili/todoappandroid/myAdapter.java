@@ -73,8 +73,8 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
             super(view);
             this.imageView = (ImageView) view.findViewById(R.id.image);
             this.title = (TextView) view.findViewById(R.id.title);
-            this.timestamp = (TextView) view.findViewById(R.id.timestamp);
-            this.fontAwesomeClock = (TextView) view.findViewById(R.id.awesome_font_calen);
+            this.timestamp = (TextView) view.findViewById(R.id.time);
+            this.fontAwesomeClock = (TextView) view.findViewById(R.id.awesome_font_cal);
             this.fontAwesomeCalendar = (TextView) view.findViewById(R.id.awesome_font_calendar);
         }
 

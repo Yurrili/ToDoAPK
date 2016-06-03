@@ -18,4 +18,5 @@
     <string name="btn_add">Add</string>
     <string name="date">12/07/2015</string>
     <string name="time">15:35</string>
+    <string name="image_badge_desc">Custom user image of task</string>
 </resources>
