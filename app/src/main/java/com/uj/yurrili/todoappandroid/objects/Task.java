@@ -1,6 +1,5 @@
 package com.uj.yurrili.todoappandroid.objects;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
 /**
@@ -14,32 +13,8 @@ public class Task {
     private Timestamp time_end;
     private Timestamp create_at;
 
-    public Task(int id, String title, String description, String url_to_icon, Timestamp time_end, Timestamp create_at) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.url_to_icon = url_to_icon;
-        this.time_end = time_end;
-        this.create_at = create_at;
-    }
+    public Task() {
 
-    public Task(int id, String title, String description, String url_to_icon, Long time_end, Timestamp create_at) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.url_to_icon = url_to_icon;
-        if (time_end != null) {
-            this.time_end = new Timestamp(time_end);
-        }
-        this.create_at = create_at;
-    }
-
-
-    public Task(String title, String description, String url_to_icon, Timestamp time_end) {
-        this.title = title;
-        this.description = description;
-        this.url_to_icon = url_to_icon;
-        this.time_end = time_end;
     }
 
     public Timestamp getCreate_at() {
@@ -90,7 +65,11 @@ public class Task {
         return time_end;
     }
 
-    public void setTime_end(Timestamp time_end) {
-        this.time_end = time_end;
+    public void setTime_end(Long time_end) {
+        if (time_end != null) {
+            this.time_end = new Timestamp(time_end);
+        } else {
+            this.time_end = null;
+        }
     }
 }

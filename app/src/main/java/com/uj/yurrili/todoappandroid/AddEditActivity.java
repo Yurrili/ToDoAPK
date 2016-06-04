@@ -186,17 +186,19 @@ public class AddEditActivity extends AppCompatActivity {
 
     private Task createTask() {
         String[] date;
-        Timestamp timestamp = null;
+        Long timestamp = null;
+        Task newTask = new Task();
 
         String desc = description.getText().toString();
         if (desc.equals("")) {
             desc = null;
         }
+        newTask.setDescription(desc);
         String urls = url.getText().toString();
         if (urls.equals("")) {
             urls = null;
         }
-
+        newTask.setUrl_to_icon(urls);
         if (!this.date.getText().toString().equals("") &&
                 this.time.getText().toString().equals("")) {
 
@@ -206,7 +208,7 @@ public class AddEditActivity extends AppCompatActivity {
                             Integer.parseInt(date[1]),
                             Integer.parseInt(date[0]),
                             0,
-                            0));
+                            0)).getTime();
 
         } else if (!this.date.getText().toString().equals("") &&
                 !this.time.getText().toString().equals("")) {
@@ -218,10 +220,12 @@ public class AddEditActivity extends AppCompatActivity {
                             Integer.parseInt(date[1]),
                             Integer.parseInt(date[0]),
                             Integer.parseInt(time[0]),
-                            Integer.parseInt(time[1])));
-        }
+                            Integer.parseInt(time[1]))).getTime();
 
-        return new Task(title.getText().toString(), desc, urls, timestamp);
+        }
+        newTask.setTitle(title.getText().toString());
+        newTask.setTime_end(timestamp);
+        return newTask;
     }
     public boolean validate() {
         boolean valid = true;

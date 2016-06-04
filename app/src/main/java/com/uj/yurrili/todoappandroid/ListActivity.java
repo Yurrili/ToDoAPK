@@ -25,6 +25,9 @@ import android.widget.TextView;
 
 import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelper;
 import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelperImpl;
+import com.uj.yurrili.todoappandroid.db_managment.db_import_export.ExportDateBaseToJSON;
+import com.uj.yurrili.todoappandroid.db_managment.db_import_export.ImportDateBaseFromJSON;
+import com.uj.yurrili.todoappandroid.db_managment.db_import_export.ImportExportUses;
 import com.uj.yurrili.todoappandroid.objects.Task;
 import com.uj.yurrili.todoappandroid.objects.sort.SortByCreatedTime;
 import com.uj.yurrili.todoappandroid.objects.sort.SortByTime;
@@ -136,11 +139,23 @@ public class ListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        ImportExportUses impexpus = new ImportExportUses();
         switch (id) {
             case R.id.action_Back_up_export:
-
+                impexpus.setImpExpWayStr(new ExportDateBaseToJSON(), getApplicationContext());
+                try {
+                    impexpus.doIt();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
                 return true;
             case R.id.action_Back_up_import:
+                impexpus.setImpExpWayStr(new ImportDateBaseFromJSON(), getApplicationContext());
+                try {
+                    impexpus.doIt();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
                 return true;
             case R.id.submenu_item1:
                 tasks = sortManager.sort(new SortByTitle());

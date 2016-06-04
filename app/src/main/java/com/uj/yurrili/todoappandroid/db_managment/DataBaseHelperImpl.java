@@ -29,7 +29,7 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "BudgetFlow.db";
 
-    public DataBaseHelperImpl (Context context) {
+    public DataBaseHelperImpl(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         JodaTimeAndroid.init(context);
     }
@@ -61,15 +61,17 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.d("DB", "UPGRADE");
         db.execSQL("DROP TABLE IF EXISTS " + Entries.Task.TABLE_NAME);
     }
 
     @Override
     public void insertTask(Task task) {
+        Log.d("DB", "insert Task" + task.getTitle());
         SQLiteDatabase dba = this.getWritableDatabase();
         Long timestamp = null;
 
-        if(task.getTime_end() != null) {
+        if (task.getTime_end() != null) {
             timestamp = task.getTime_end().getTime();
         }
 
@@ -87,6 +89,7 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
 
     @Override
     public void removeTask(Task task) {
+        Log.d("DB", "insert Task" + task.getTitle());
         SQLiteDatabase dba = this.getWritableDatabase();
         dba.delete(Entries.Task.TABLE_NAME, Entries.Task._ID + "='" + task.getId() + "'", null);
         dba.close();
@@ -95,10 +98,11 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
 
     @Override
     public void updateTask(Task task) {
+        Log.d("DB", "insert Task" + task.getTitle());
         SQLiteDatabase dba = this.getWritableDatabase();
         Long timestamp = null;
 
-        if(task.getTime_end() != null) {
+        if (task.getTime_end() != null) {
             timestamp = task.getTime_end().getTime();
         }
 
@@ -108,32 +112,60 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
         values.put(Entries.Task.COLUMN_DESCRIPTION, task.getDescription());
         values.put(Entries.Task.COLUMN_TIME_END, timestamp);
         values.put(Entries.Task.COLUMN_URL_TO_ICON, task.getUrl_to_icon());
-        
+
         dba.update(Entries.Task.TABLE_NAME, values, Entries.Task._ID + "='" + task.getId() + "'", null);
         dba.close();
     }
 
     @Override
+    public void setTasksFromJson(List<Task> list) {
+        SQLiteDatabase dba = this.getWritableDatabase();
+        dba.execSQL("DROP TABLE IF EXISTS " + Entries.Task.TABLE_NAME);
+        dba.execSQL(Entries.getSQL_CREATE_ENTRIES_Task());
+        Log.d("DB", "insert Tasks from JSON");
+        for (Task task : list) {
+            Long timestamp = null;
+
+            if (task.getTime_end() != null) {
+                timestamp = task.getTime_end().getTime();
+            }
+
+            ContentValues values = new ContentValues();
+            values.put(Entries.Task._ID, task.getId());
+            values.put(Entries.Task.COLUMN_TITLE, task.getTitle());
+            values.put(Entries.Task.COLUMN_DESCRIPTION, task.getDescription());
+            values.put(Entries.Task.COLUMN_TIME_END, timestamp);
+            values.put(Entries.Task.COLUMN_TIMESTAMP, Utilities.jodaToSQLTimestamp(LocalDateTime.now()).getTime());
+            values.put(Entries.Task.COLUMN_URL_TO_ICON, task.getUrl_to_icon());
+
+            dba.insert(Entries.Task.TABLE_NAME, null, values);
+            dba.close();
+        }
+    }
+
+    @Override
     public Task getTask(String id) throws MalformedURLException {
+        Log.d("DB", "get Task" + id);
         SQLiteDatabase dba = this.getReadableDatabase();
 
         Cursor c = dba.query(Entries.Task.TABLE_NAME,
                 Entries.selectAllTasks,
-                Entries.Task._ID+"='"+id+"'",null,
+                Entries.Task._ID + "='" + id + "'", null,
                 null, null, null);
 
         if (c != null) {
             c.moveToFirst();
-            return new Task(c.getInt(0), // ID
-                    c.getString(1), // TITLE
-                    c.getString(2), // DESCRIPTION
-                    c.getString(3), // URL_TO_ICON
-                    c.getLong(4), // TIMESTAMP
-                    new Timestamp(c.getLong(5))
-                    );
-        }
+            Task a = new Task();
+            a.setId(c.getInt(0));
+            a.setTitle(c.getString(1));
+            a.setDescription(c.getString(2));
+            a.setUrl_to_icon(c.getString(3));
+            a.setTime_end(c.getLong(4));
+            a.setCreate_at(new Timestamp(c.getLong(5)));
+            c.close();
+            return a;
 
-        c.close();
+        }
         dba.close();
         return null;
 
@@ -150,20 +182,20 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
 
         if (c != null) {
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-
-                list.add(new Task(c.getInt(0), // ID
-                            c.getString(1), // TITLE
-                            c.getString(2), // DESCRIPTION
-                            c.getString(3), // URL_TO_ICON
-                            c.getLong(4) , // TIMESTAMP
-                        new Timestamp(c.getLong(5))
-                    ));
-
+                Task a = new Task();
+                a.setId(c.getInt(0));
+                a.setTitle(c.getString(1));
+                a.setDescription(c.getString(2));
+                a.setUrl_to_icon(c.getString(3));
+                a.setTime_end(c.getLong(4));
+                a.setCreate_at(new Timestamp(c.getLong(5)));
+                list.add(a);
             }
+            c.close();
         }
-
-        c.close();
         dba.close();
         return list;
     }
+
+
 }

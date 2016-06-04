@@ -40,6 +40,8 @@ public class Entries {
         public static final String COLUMN_TIMESTAMP = "Timestamp";
     }
 
+    public static final int taskColumns = 6;
+
     public static final String[] selectAllTasks = new String [] { Task._ID, Task.COLUMN_TITLE, Task.COLUMN_DESCRIPTION,
             Task.COLUMN_URL_TO_ICON, Task.COLUMN_TIME_END, Task.COLUMN_TIMESTAMP};
 }
