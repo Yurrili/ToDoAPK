@@ -16,6 +16,7 @@ public interface DataBaseHelper {
     void removeTask(Task task);
     void updateTask(Task task);
 
-    Task getTask(Integer id) throws MalformedURLException;
+
+    Task getTask(String id) throws MalformedURLException;
     List<Task> getTasks() throws MalformedURLException;
 }

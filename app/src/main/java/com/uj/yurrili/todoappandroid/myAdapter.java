@@ -26,9 +26,15 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
     private Context mContext;
     private Typeface typeFace;
     private final OnItemClickListener listener;
+    private final OnItemLongClickListener listenerLong;
 
     public interface OnItemClickListener {
-        void onItemClick(Task item);
+        public void onItemClicked(int position, Task task);
+
+    }
+
+    public interface OnItemLongClickListener {
+        public boolean onItemLongClicked(int position, Task task);
     }
 
     @Override
@@ -40,10 +46,23 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
         }
     }
 
-    public myAdapter(Context context, List<Task> items, OnItemClickListener listener) {
+
+    public Task getItem(int position) {
+        return items.get(position);
+    }
+
+    public void removeItem(int position) {
+        items.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public myAdapter(Context context, List<Task> items,
+                     OnItemClickListener listener,
+                     OnItemLongClickListener listenerLong) {
         this.items = items;
         this.mContext = context;
         this.listener = listener;
+        this.listenerLong = listenerLong;
         this.typeFace = Typeface.createFromAsset(mContext.getAssets(),
                 mContext.getResources().getString(R.string.font_place));
     }
@@ -57,7 +76,7 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
 
     @Override
     public void onBindViewHolder(myAdapter.CustomViewHolder holder, int position) {
-        holder.bind(items.get(position), listener);
+        holder.bind(holder, items.get(position), position);
     }
 
     @Override
@@ -78,7 +97,7 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
             ButterKnife.inject(this, view);
         }
 
-        public void bind(final Task item, final OnItemClickListener listener) {
+        public void bind(RecyclerView.ViewHolder holder, final Task item, final int position) {
             setImageView(item);
             title.setText(item.getTitle());
 
@@ -96,8 +115,17 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
             }
 
             itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    listener.onItemClick(item);
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClicked(position, item);
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    listenerLong.onItemLongClicked(position, item);
+                    return true;
                 }
             });
         }
@@ -111,6 +139,8 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
             imageView.setBackground(mContext.getResources().getDrawable(R.drawable.ic_circle4));
 
         }
+
+
     }
 
 

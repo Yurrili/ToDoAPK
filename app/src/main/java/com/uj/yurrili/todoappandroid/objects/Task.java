@@ -22,6 +22,18 @@ public class Task {
         this.time_end = time_end;
     }
 
+    public Task(int id, String title, String description, String url_to_icon, Long time_end) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.url_to_icon = url_to_icon;
+        if (time_end != null) {
+            this.time_end = new Timestamp(time_end);
+        }
+
+    }
+
+
     public Task( String title, String description, String url_to_icon, Timestamp time_end) {
 
         this.title = title;

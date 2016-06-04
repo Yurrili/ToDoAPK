@@ -92,11 +92,15 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
         dba.close();
     }
 
+
     @Override
     public void updateTask(Task task) {
         SQLiteDatabase dba = this.getWritableDatabase();
+        Long timestamp = null;
 
-        Long timestamp = task.getTime_end().getTime();
+        if(task.getTime_end() != null) {
+            timestamp = task.getTime_end().getTime();
+        }
 
         ContentValues values = new ContentValues();
 
@@ -104,33 +108,34 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
         values.put(Entries.Task.COLUMN_DESCRIPTION, task.getDescription());
         values.put(Entries.Task.COLUMN_TIME_END, timestamp);
         values.put(Entries.Task.COLUMN_URL_TO_ICON, task.getUrl_to_icon());
-
-
+        
         dba.update(Entries.Task.TABLE_NAME, values, Entries.Task._ID + "='" + task.getId() + "'", null);
         dba.close();
     }
 
     @Override
-    public Task getTask(Integer id) throws MalformedURLException {
+    public Task getTask(String id) throws MalformedURLException {
         SQLiteDatabase dba = this.getReadableDatabase();
 
         Cursor c = dba.query(Entries.Task.TABLE_NAME,
                 Entries.selectAllTasks,
-                Entries.Task._ID+"=?",new String[]{id.toString()},
+                Entries.Task._ID+"='"+id+"'",null,
                 null, null, null);
 
         if (c != null) {
-            return new Task(  c.getInt(0), // ID
+            c.moveToFirst();
+            return new Task(c.getInt(0), // ID
                     c.getString(1), // TITLE
                     c.getString(2), // DESCRIPTION
                     c.getString(3), // URL_TO_ICON
-                    new Timestamp(c.getLong(4)) // TIMESTAMP
-            );
+                    c.getLong(4) // TIMESTAMP
+                    );
         }
 
         c.close();
         dba.close();
         return null;
+
     }
 
     @Override
@@ -144,12 +149,14 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
 
         if (c != null) {
             for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                list.add(new Task(  c.getInt(0), // ID
-                                    c.getString(1), // TITLE
-                                    c.getString(2), // DESCRIPTION
-                                    c.getString(3), // URL_TO_ICON
-                                    new Timestamp(c.getLong(4)) // TIMESTAMP
-                       ));
+
+                list.add(new Task(c.getInt(0), // ID
+                            c.getString(1), // TITLE
+                            c.getString(2), // DESCRIPTION
+                            c.getString(3), // URL_TO_ICON
+                            c.getLong(4) // TIMESTAMP
+                    ));
+
             }
         }
 

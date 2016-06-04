@@ -24,12 +24,12 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
         android:layout_gravity="center_vertical"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:gravity="center_vertical"
         android:orientation="vertical"
         android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="20dp">
+        android:paddingRight="20dp">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/input_lay_title"
@@ -40,8 +40,9 @@
                 android:id="@+id/input_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:hint="@string/hint_title" />
+                android:hint="@string/hint_title"
+                android:singleLine="true" />
+
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -53,8 +54,8 @@
                 android:id="@+id/input_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textShortMessage"
-                android:hint="@string/hint_description" />
+                android:hint="@string/hint_description"
+                android:inputType="textShortMessage" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -66,15 +67,15 @@
                 android:id="@+id/input_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textUri"
-                android:hint="@string/hint_url" />
+                android:hint="@string/hint_url"
+                android:inputType="textUri" />
         </android.support.design.widget.TextInputLayout>
 
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginTop="3dp"
 
             android:columnCount="5"
             android:orientation="horizontal">
@@ -83,67 +84,67 @@
                 android:id="@+id/awesome_font_calendar"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:textSize="20sp"
-                android:layout_gravity="center_vertical"
                 android:layout_column="0"
-                android:text="@string/fa_calendar" />
+                android:layout_gravity="center_vertical"
+                android:text="@string/fa_calendar"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:focusable="false"
-                android:layout_marginStart="5dp"
                 android:layout_column="1"
-                android:textSize="20sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="5dp"
+                android:focusable="false"
+                android:hint="@string/date"
                 android:inputType="date"
-                android:hint="@string/date" />
+                android:textSize="20sp" />
 
 
             <TextView
                 android:id="@+id/awesome_font_clock"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:layout_column="2"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="4dp"
-                android:layout_column="2"
                 android:layout_marginStart="15dp"
-                android:textSize="20sp"
-                android:text="@string/fa_clock_o" />
+                android:text="@string/fa_clock_o"
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:textSize="20sp"
-                android:focusable="false"
-                android:inputType="time"
                 android:layout_column="3"
-                android:hint="@string/time" />
+                android:layout_gravity="center_vertical"
+                android:focusable="false"
+                android:hint="@string/time"
+                android:inputType="time"
+                android:textSize="20sp" />
 
-            <TextView
+            <Button
                 android:id="@+id/awesome_font_eraser"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="2dp"
-                android:textSize="20sp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_gravity="end|center_vertical"
-                android:textColor="@color/colorPrimary"
-                android:text="@string/fa_eraser" />
+                android:layout_marginEnd="2dp"
+                android:background="@color/colorPrimary"
+                android:text="@string/fa_eraser"
+                android:textColor="@color/cardview_light_background" />
 
         </GridLayout>
 
 
-
-        <Button android:id="@+id/btn_add"
+        <Button
+            android:id="@+id/btn_add"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btn_add"
-            android:background="@color/colorPrimary"
             android:layout_marginTop="40dp"
-            android:textColor="@android:color/white"/>
+            android:background="@color/colorPrimary"
+            android:text="@string/btn_add"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 
