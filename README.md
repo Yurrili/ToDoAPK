@@ -13,6 +13,10 @@ Klaudia Olejniczak
 
 	Aplikacja budowana przy pomocy Gradle.
 	
+	## Min SDK ver 19
+	## Target SDK ver 23
+	## APK kompilowana w SDK ver 23
+	
 	## Biblioteki dodatkowe:
 			* RecyclerView - ver 23.0
 			* CardViews - ver 23.0
