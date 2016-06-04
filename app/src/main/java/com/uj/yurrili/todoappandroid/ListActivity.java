@@ -21,6 +21,7 @@ import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
 
 import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelper;
 import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelperImpl;
@@ -47,6 +48,8 @@ public class ListActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
+    @InjectView(R.id.empty_view)
+    TextView emptyView;
     SortManager sortManager;
     private List<Task> tasks;
 
@@ -104,15 +107,24 @@ public class ListActivity extends AppCompatActivity {
 
     }
 
-    public void setmAdapter(){
+    private void setmAdapter(){
             sortManager = new SortManager(tasks);
             // Pair - first : onClick-info, second : onLongClick-edit
             Pair<myAdapter.OnItemClickListener, myAdapter.OnItemLongClickListener> listeners =  createListeners();
             mAdapter = new myAdapter(getApplicationContext(), tasks, listeners.first, listeners.second);
+            mRecyclerView.setAdapter(mAdapter);
+            checkIfEmpty();
+    }
 
-
-
-        mRecyclerView.setAdapter(mAdapter);
+    private void checkIfEmpty(){
+        if (tasks.isEmpty()) {
+            mRecyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        }
+        else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -161,6 +173,7 @@ public class ListActivity extends AppCompatActivity {
             public void onClick(DialogInterface arg0, int arg1) {
                 ((myAdapter) mAdapter).removeItem(position);
                 dba_Task.removeTask(temp);
+                checkIfEmpty();
             }
         });
 

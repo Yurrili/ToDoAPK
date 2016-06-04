@@ -35,7 +35,6 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
 
     public interface OnItemClickListener {
         void onItemClicked(int position, Task task);
-
     }
 
     public interface OnItemLongClickListener {
