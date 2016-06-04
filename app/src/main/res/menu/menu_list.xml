@@ -13,4 +13,18 @@
         android:orderInCategory="100"
         android:title="@string/action_back_up_export"
         app:showAsAction="never" />
+
+    <item android:id="@+id/submenu"
+        android:title="@string/submenu_sort"
+        android:icon="@drawable/ic_reorder_white_24dp"
+        app:showAsAction="ifRoom|withText" >
+        <menu>
+            <item android:id="@+id/submenu_item1"
+                android:title="@string/submenu_sort_item_1" />
+            <item android:id="@+id/submenu_item2"
+                android:title="@string/submenu_sort_item_2" />
+            <item android:id="@+id/submenu_item3"
+                android:title="@string/submenu_sort_item_3" />
+        </menu>
+    </item>
 </menu>

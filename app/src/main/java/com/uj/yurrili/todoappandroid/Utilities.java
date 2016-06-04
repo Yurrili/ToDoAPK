@@ -12,6 +12,8 @@ import android.graphics.Typeface;
 import android.util.Pair;
 import android.widget.TextView;
 
+import com.uj.yurrili.todoappandroid.objects.Task;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -71,4 +73,6 @@ public class Utilities {
     public static String setTimePick(int hourOfDay, int minute) {
         return hourOfDay +  ":" + minute;
     }
+
+
 }

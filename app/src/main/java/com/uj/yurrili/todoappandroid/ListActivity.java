@@ -25,6 +25,11 @@ import android.view.Menu;
 import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelper;
 import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelperImpl;
 import com.uj.yurrili.todoappandroid.objects.Task;
+import com.uj.yurrili.todoappandroid.objects.sort.SortByCreatedTime;
+import com.uj.yurrili.todoappandroid.objects.sort.SortByTime;
+import com.uj.yurrili.todoappandroid.objects.sort.SortByTitle;
+import com.uj.yurrili.todoappandroid.objects.sort.SortManager;
+import com.uj.yurrili.todoappandroid.objects.sort.SortStrategy;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -42,6 +47,8 @@ public class ListActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
+    SortManager sortManager;
+    private List<Task> tasks;
 
     private RecyclerView.Adapter mAdapter;
     private Paint p = new Paint();
@@ -59,6 +66,7 @@ public class ListActivity extends AppCompatActivity {
         dba_Task = new DataBaseHelperImpl(getApplicationContext());
         initRecyclerView();
         initFloatingActionButton();
+
     }
 
     private void initLibraries() {
@@ -87,16 +95,22 @@ public class ListActivity extends AppCompatActivity {
         // Swipe behaviour created in createSimpleCall() method
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createSimpleCall());
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
-
         try {
-            List<Task> tasks = dba_Task.getTasks();
+        tasks = dba_Task.getTasks();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        setmAdapter();
+
+    }
+
+    public void setmAdapter(){
+            sortManager = new SortManager(tasks);
             // Pair - first : onClick-info, second : onLongClick-edit
             Pair<myAdapter.OnItemClickListener, myAdapter.OnItemLongClickListener> listeners =  createListeners();
             mAdapter = new myAdapter(getApplicationContext(), tasks, listeners.first, listeners.second);
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+
 
         mRecyclerView.setAdapter(mAdapter);
     }
@@ -112,8 +126,24 @@ public class ListActivity extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_Back_up_export:
+
                 return true;
             case R.id.action_Back_up_import:
+                return true;
+            case R.id.submenu_item1:
+                tasks = sortManager.sort(new SortByTitle());
+                setmAdapter();
+                mAdapter.notifyDataSetChanged();
+                return true;
+            case R.id.submenu_item2:
+                tasks = sortManager.sort(new SortByTime());
+                setmAdapter();
+                mAdapter.notifyDataSetChanged();
+                return true;
+            case R.id.submenu_item3:
+                tasks = sortManager.sort(new SortByCreatedTime());
+                setmAdapter();
+                mAdapter.notifyDataSetChanged();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

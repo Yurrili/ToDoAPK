@@ -27,4 +27,8 @@
     # Menu items
     <string name="action_back_up_import">Import DB to file</string>
     <string name="action_back_up_export">Export DB to file</string>
+    <string name="submenu_sort_item_3">BY CREATE TIME</string>
+    <string name="submenu_sort_item_2">BY TIME</string>
+    <string name="submenu_sort_item_1">BY TITLE</string>
+    <string name="submenu_sort">sort</string>
 </resources>

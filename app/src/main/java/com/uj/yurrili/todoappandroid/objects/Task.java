@@ -42,6 +42,14 @@ public class Task {
         this.time_end = time_end;
     }
 
+    public Timestamp getCreate_at() {
+        return create_at;
+    }
+
+    public void setCreate_at(Timestamp create_at) {
+        this.create_at = create_at;
+    }
+
     public Task(String title) {
         this.title = title;
     }
