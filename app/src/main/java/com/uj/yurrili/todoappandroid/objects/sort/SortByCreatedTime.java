@@ -21,17 +21,9 @@ public class SortByCreatedTime implements SortStrategy{
         @Override
         public int compare(Task a, Task b) {
 
-            // TU NIE POWINNO BYC NULLI
-            if(a.getCreate_at().getTime() == 0 && b.getCreate_at().getTime() > 0){
-                return 1;
-            } else if (a.getCreate_at().getTime() > 0 && b.getCreate_at().getTime() == 0) {
-                return -1;
-            } else if ( a.getCreate_at().getTime() == 0) {
-                return 0;
-            } else {
-                return a.getCreate_at().getTime() < b.getCreate_at().getTime() ? -1 :
-                        a.getCreate_at().getTime() == b.getCreate_at().getTime() ? 0 : 1;
-            }
+            return a.getCreate_at().getTime() < b.getCreate_at().getTime() ? 1 :
+                        a.getCreate_at().getTime() == b.getCreate_at().getTime() ? 0 : -1;
+
         }
     }
 }

@@ -128,7 +128,8 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
                     c.getString(1), // TITLE
                     c.getString(2), // DESCRIPTION
                     c.getString(3), // URL_TO_ICON
-                    c.getLong(4) // TIMESTAMP
+                    c.getLong(4), // TIMESTAMP
+                    new Timestamp(c.getLong(5))
                     );
         }
 
@@ -154,7 +155,8 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
                             c.getString(1), // TITLE
                             c.getString(2), // DESCRIPTION
                             c.getString(3), // URL_TO_ICON
-                            c.getLong(4) // TIMESTAMP
+                            c.getLong(4) , // TIMESTAMP
+                        new Timestamp(c.getLong(5))
                     ));
 
             }

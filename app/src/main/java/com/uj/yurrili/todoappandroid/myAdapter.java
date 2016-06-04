@@ -13,6 +13,11 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.uj.yurrili.todoappandroid.objects.Task;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
+import org.joda.time.LocalDateTime;
+
+import java.sql.Timestamp;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -29,23 +34,27 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
     private final OnItemLongClickListener listenerLong;
 
     public interface OnItemClickListener {
-        public void onItemClicked(int position, Task task);
+        void onItemClicked(int position, Task task);
 
     }
 
     public interface OnItemLongClickListener {
-        public boolean onItemLongClicked(int position, Task task);
+         boolean onItemLongClicked(int position, Task task);
     }
 
     @Override
     public int getItemViewType(int position) {
+        Timestamp now = Utilities.jodaToSQLTimestamp(LocalDateTime.now());
         if(items.get(position).getUrl_to_icon()!= null) {
             return 1;
         } else {
-            return 0;
+            if(items.get(position).getTime_end().getTime() < now.getTime()){
+                return 2;
+            } else {
+                return 0;
+            }
         }
     }
-
 
     public Task getItem(int position) {
         return items.get(position);
@@ -65,6 +74,7 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
         this.listenerLong = listenerLong;
         this.typeFace = Typeface.createFromAsset(mContext.getAssets(),
                 mContext.getResources().getString(R.string.font_place));
+
     }
 
     @Override
@@ -95,6 +105,7 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
         public CustomViewHolder(View view) {
             super(view);
             ButterKnife.inject(this, view);
+            JodaTimeAndroid.init(mContext);
         }
 
         public void bind(RecyclerView.ViewHolder holder, final Task item, final int position) {
@@ -102,11 +113,19 @@ public class myAdapter extends RecyclerView.Adapter<myAdapter.CustomViewHolder> 
             title.setText(item.getTitle());
 
             if(item.getTime_end().getTime() > 0) {
+                Timestamp now = Utilities.jodaToSQLTimestamp(LocalDateTime.now());
+
                 Pair<String,String> datetime = Utilities.convertTime(item.getTime_end());
                 timePlace.setText(datetime.first);
                 datePlace.setText(datetime.second);
                 fontAwesomeCalendar.setTypeface(typeFace);
                 fontAwesomeClock.setTypeface(typeFace);
+                if(item.getTime_end().getTime() < now.getTime()){
+                    timePlace.setTextColor(mContext.getResources().getColor(R.color.colorRedSwipe));
+                    datePlace.setTextColor(mContext.getResources().getColor(R.color.colorRedSwipe));
+                    fontAwesomeCalendar.setTextColor(mContext.getResources().getColor(R.color.colorRedSwipe));
+                    fontAwesomeClock.setTextColor(mContext.getResources().getColor(R.color.colorRedSwipe));
+                }
             } else {
                 timePlace.setVisibility(View.INVISIBLE);
                 datePlace.setVisibility(View.INVISIBLE);

@@ -14,15 +14,16 @@ public class Task {
     private Timestamp time_end;
     private Timestamp create_at;
 
-    public Task(int id, String title, String description, String url_to_icon, Timestamp time_end) {
+    public Task(int id, String title, String description, String url_to_icon, Timestamp time_end, Timestamp create_at) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.url_to_icon = url_to_icon;
         this.time_end = time_end;
+        this.create_at = create_at;
     }
 
-    public Task(int id, String title, String description, String url_to_icon, Long time_end) {
+    public Task(int id, String title, String description, String url_to_icon, Long time_end, Timestamp create_at) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -30,12 +31,11 @@ public class Task {
         if (time_end != null) {
             this.time_end = new Timestamp(time_end);
         }
-
+        this.create_at = create_at;
     }
 
 
-    public Task( String title, String description, String url_to_icon, Timestamp time_end) {
-
+    public Task(String title, String description, String url_to_icon, Timestamp time_end) {
         this.title = title;
         this.description = description;
         this.url_to_icon = url_to_icon;
