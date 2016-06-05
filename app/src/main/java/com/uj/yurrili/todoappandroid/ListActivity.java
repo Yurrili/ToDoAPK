@@ -27,6 +27,7 @@ import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelper;
 import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelperImpl;
 import com.uj.yurrili.todoappandroid.db_managment.db_import_export.ExportDateBaseToJSON;
 import com.uj.yurrili.todoappandroid.db_managment.db_import_export.ImportDateBaseFromJSON;
+import com.uj.yurrili.todoappandroid.db_managment.db_import_export.ImportExport;
 import com.uj.yurrili.todoappandroid.db_managment.db_import_export.ImportExportUses;
 import com.uj.yurrili.todoappandroid.objects.Task;
 import com.uj.yurrili.todoappandroid.objects.sort.SortByCreatedTime;
@@ -58,9 +59,9 @@ public class ListActivity extends AppCompatActivity {
 
     private RecyclerView.Adapter mAdapter;
     private Paint p = new Paint();
-    // Temps for dialog
     private Task temp;
     private int position;
+    private int sortWay;
 
 
     @Override
@@ -70,6 +71,9 @@ public class ListActivity extends AppCompatActivity {
         initLibraries();
         setSupportActionBar(toolbar);
         dba_Task = new DataBaseHelperImpl(getApplicationContext());
+        if (savedInstanceState != null) {
+            sortWay = savedInstanceState.getInt("sort", 0);
+        }
         initRecyclerView();
         initFloatingActionButton();
 
@@ -97,34 +101,54 @@ public class ListActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
         // Swipe behaviour created in createSimpleCall() method
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createSimpleCall());
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
+
+
         try {
-        tasks = dba_Task.getTasks();
+            if(tasks == null) {
+                tasks = dba_Task.getTasks();
+            }
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         setmAdapter();
+        sortManager = new SortManager(tasks);
+        getSortStrategy();
 
     }
 
-    private void setmAdapter(){
-            sortManager = new SortManager(tasks);
-            // Pair - first : onClick-info, second : onLongClick-edit
-            Pair<myAdapter.OnItemClickListener, myAdapter.OnItemLongClickListener> listeners =  createListeners();
-            mAdapter = new myAdapter(getApplicationContext(), tasks, listeners.first, listeners.second);
-            mRecyclerView.setAdapter(mAdapter);
-            checkIfEmpty();
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // Make sure to call the super method so that the states of our views are saved
+        super.onSaveInstanceState(outState);
+        // Save our own state now
+        outState.putInt("sort", sortWay);
     }
 
-    private void checkIfEmpty(){
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            sortWay = savedInstanceState.getInt("sort", 0);
+        }
+    }
+
+    private void setmAdapter() {
+
+        // Pair - first : onClick-info, second : onLongClick-edit
+        Pair<myAdapter.OnItemClickListener, myAdapter.OnItemLongClickListener> listeners = createListeners();
+        mAdapter = new myAdapter(getApplicationContext(), tasks, listeners.first, listeners.second);
+        mRecyclerView.setAdapter(mAdapter);
+        checkIfEmpty();
+    }
+
+    private void checkIfEmpty() {
         if (tasks.isEmpty()) {
             mRecyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             mRecyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
         }
@@ -140,7 +164,7 @@ public class ListActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage(
                 getResources().getString(R.string.q_dialog_removing) +
-                temp.getTitle());
+                        temp.getTitle());
 
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
@@ -163,7 +187,7 @@ public class ListActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private ItemTouchHelper.SimpleCallback createSimpleCall(){
+    private ItemTouchHelper.SimpleCallback createSimpleCall() {
         return new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -193,7 +217,7 @@ public class ListActivity extends AppCompatActivity {
         };
     }
 
-    private Pair<myAdapter.OnItemClickListener, myAdapter.OnItemLongClickListener> createListeners(){
+    private Pair<myAdapter.OnItemClickListener, myAdapter.OnItemLongClickListener> createListeners() {
         myAdapter.OnItemClickListener onClick = new myAdapter.OnItemClickListener() {
             @Override
             public void onItemClicked(int position, Task task) {
@@ -206,64 +230,79 @@ public class ListActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClicked(int position, Task task) {
                 Intent intent = new Intent(getApplicationContext(), AddEditActivity.class);
-                intent.putExtra("id", task.getId()+"");
+                intent.putExtra("id", task.getId() + "");
                 startActivity(intent);
                 return false;
             }
         };
 
-        return new Pair<>(onClick,onLongClick);
+        return new Pair<>(onClick, onLongClick);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        ImportExportUses impexpus = new ImportExportUses();
+
         switch (id) {
             case R.id.action_Back_up_export:
-                impexpus.setImpExpWayStr(new ExportDateBaseToJSON(), getApplicationContext());
-                try {
-                    if (impexpus.doIt()){
-                        Snackbar.make(mRecyclerView, "Export succeed", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                    }
-                    tasks = dba_Task.getTasks();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-                setmAdapter();
-                mAdapter.notifyDataSetChanged();
+                doImportExport(new ExportDateBaseToJSON(), "Export succeed");
                 return true;
             case R.id.action_Back_up_import:
-                impexpus.setImpExpWayStr(new ImportDateBaseFromJSON(), getApplicationContext());
-                try {
-                    if(impexpus.doIt()){
-                        Snackbar.make(mRecyclerView, "Import succeed" , Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                    }
-                    tasks = dba_Task.getTasks();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-
-                setmAdapter();
-                mAdapter.notifyDataSetChanged();
+                doImportExport(new ImportDateBaseFromJSON(), "Import succeed");
                 return true;
             case R.id.submenu_item1:
-                tasks = sortManager.sort(new SortByTitle());
-                setmAdapter();
-                mAdapter.notifyDataSetChanged();
+                sortWay = 1;
+                getSortStrategy();
                 return true;
             case R.id.submenu_item2:
-                tasks = sortManager.sort(new SortByTime());
-                setmAdapter();
-                mAdapter.notifyDataSetChanged();
+                sortWay = 2;
+                getSortStrategy();
                 return true;
             case R.id.submenu_item3:
-                tasks = sortManager.sort(new SortByCreatedTime());
-                setmAdapter();
-                mAdapter.notifyDataSetChanged();
+                sortWay = 3;
+                getSortStrategy();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void getSortStrategy(){
+        switch(sortWay){
+            case 1:
+                setSortTasks(new SortByTitle());
+                break;
+            case 2:
+                setSortTasks(new SortByTime());
+                break;
+            case 3:
+                setSortTasks(new SortByCreatedTime());
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void doImportExport(ImportExport way, String succ){
+        ImportExportUses impexpus = new ImportExportUses();
+        impexpus.setImpExpWayStr(way, getApplicationContext());
+        try {
+            if (impexpus.doIt()) {
+                Snackbar.make(mRecyclerView, succ, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            }
+            tasks = dba_Task.getTasks();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        setmAdapter();
+        mAdapter.notifyDataSetChanged();
+    }
+
+
+    private void setSortTasks(SortStrategy sort){
+        tasks = sortManager.sort(sort);
+        setmAdapter();
+        mAdapter.notifyDataSetChanged();
+
     }
 }
