@@ -3,7 +3,7 @@
 
     <string name="db_name">BudgetFlow.db</string>
     <string name="font_place">font/fontawesome-webfont.ttf</string>
-    <string name="q_dialog_removing">Are you sure,you want remove this task?\n</string>
+    <string name="q_dialog_removing">Are you sure you want to remove this task?\n</string>
     # Links to font-awesome
     <string name="fa_clock_o">&#xf017;</string>
     <string name="fa_bitbucket">&#xf171;</string>
@@ -23,12 +23,13 @@
     <string name="date">12/07/2015</string>
     <string name="time">15:35</string>
     <string name="double_dots">:</string>
-
+    <string name="action_back_up_import_succ_msg">Import successful</string>
+    <string name="action_back_up_export_succ_msg">Export successful</string>
     # Descriptions of images
     <string name="image_badge_desc">Custom user image of task</string>
 
     # Menu items
-    <string name="action_back_up_import">Import DB to file</string>
+    <string name="action_back_up_import">Import DB from file</string>
     <string name="action_back_up_export">Export DB to file</string>
     <string name="submenu_sort_item_3">BY CREATE TIME</string>
     <string name="submenu_sort_item_2">BY TIME</string>

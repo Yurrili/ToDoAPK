@@ -24,8 +24,9 @@ public class SortByTime implements SortStrategy{
                 return 1;
             } else if (a.getTime_end().getTime() > 0 && b.getTime_end().getTime() == 0) {
                 return -1;
-            } else if ( a.getTime_end().getTime() == 0){
-                return 0;
+            } else if ( a.getTime_end().getTime() == 0 && b.getTime_end().getTime() == 0){
+                return  a.getCreate_at().getTime() < b.getCreate_at().getTime() ? 1 :
+                        a.getCreate_at().getTime() == b.getCreate_at().getTime() ? 0 : -1;
             } else {
                 return a.getTime_end().getTime() < b.getTime_end().getTime() ? -1 :
                         a.getTime_end().getTime() == b.getTime_end().getTime() ? 0 : 1;

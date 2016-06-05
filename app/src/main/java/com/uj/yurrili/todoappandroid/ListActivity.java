@@ -284,6 +284,7 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private void doImportExport(ImportExport way, String succ){
+        // Handling import and export of db, refreshing the view
         ImportExportUses impexpus = new ImportExportUses();
         impexpus.setImpExpWayStr(way, getApplicationContext());
         try {

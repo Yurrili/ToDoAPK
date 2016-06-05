@@ -18,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -117,13 +118,40 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
         dba.close();
     }
 
+    private boolean containsID(List<Task> list, int id) {
+        for (Task o : list) {
+            if(o.getId() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean find(SQLiteDatabase db, String id)
+    {
+        Cursor cursor = db.query(Entries.Task.TABLE_NAME,
+            Entries.selectAllTasks,
+            Entries.Task._ID + "='" + id + "'", null,
+            null, null, null);
+        if (!(cursor.moveToFirst()) || cursor.getCount() ==0){
+            return false;
+        }
+        return true; // true if task with that id exists in db
+    }
+
     @Override
     public void setTasksFromJson(List<Task> list) {
+        List<Task> old_db = new ArrayList<>();
+        try {
+            old_db = getTasks();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         SQLiteDatabase dba = this.getWritableDatabase();
-        dba.execSQL("DROP TABLE IF EXISTS " + Entries.Task.TABLE_NAME);
-        dba.execSQL(Entries.getSQL_CREATE_ENTRIES_Task());
+
         Log.d("DB", "insert Tasks from JSON");
         for (Task task : list) {
+
             Long timestamp = null;
 
             if (task.getTime_end() != null) {
@@ -138,7 +166,13 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
             values.put(Entries.Task.COLUMN_TIMESTAMP, Utilities.jodaToSQLTimestamp(LocalDateTime.now()).getTime());
             values.put(Entries.Task.COLUMN_URL_TO_ICON, task.getUrl_to_icon());
 
-            dba.insert(Entries.Task.TABLE_NAME, null, values);
+            if(find(dba, task.getId()+"")){
+                dba.update(Entries.Task.TABLE_NAME, values, Entries.Task._ID + "='" + task.getId() + "'", null);
+                Log.d("DB", "update" + task.getTitle());
+            } else {
+                dba.insert(Entries.Task.TABLE_NAME, null, values);
+                Log.d("DB", "insert" + task.getTitle());
+            }
 
         }
         dba.close();
