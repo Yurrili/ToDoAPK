@@ -1,47 +1,43 @@
-### Simple android application
+### A simple android application
 
 # ToDo
 
-Autor:
+Author:
 Klaudia Olejniczak
 
-# Opis ogólny
+# General description:
 
-	Aplikacja do zarządzania swoją listą tasków.
+	Tasklist manager app.
 			
-# Opis techniczny:
+# Technical description:
 
-	Aplikacja budowana przy pomocy Gradle.
+	Application built using Gradle.
 	
-	## Min SDK ver 19
-	## Target SDK ver 23
-	## APK kompilowana w SDK ver 23
-	
-	## Biblioteki dodatkowe:
+	## Additional libraries:
 			* RecyclerView - ver 23.0
 			* CardViews - ver 23.0
-			* Picasso - ver 2.5.2 - biblioteka do pobierania obrazków z url'ów
-			* JodaTime - ver 2.9.3.1 - biblioteka do zarządzania czasem
-			* Butterknife - ver 6.1.0 - biblioteka do wiązania elementów z view'sów w XML'u do zmiennych w JAVIE
+			* Picasso - ver 2.5.2 - Library for downloading images from URLs.
+			* JodaTime - ver 2.9.3.1 - Time management library
+			* Butterknife - ver 6.1.0 - Library for binding view elements to Java variables
 			
-# Opis szczegółowy:
+# Detailed description:
 
-	## Task zawiera:
-			* Tytuł - pole obowiązkowe
-			* Opis
-			* Date z deadline'm
-			* URL do obrazka
+	## Task contains:
+			* Title - required field
+			* Description
+			* Deadline date
+			* image URL
 			
-	## Funkcjonalnosć:
-			* Dodawanie nowych tasków - poprzez floatingButtona
-			* Usuwanie tasków zakończonych - porpzez swipe elementy listy
-			* Edycja tasków - poprzez long clicka
-			* Back up danych do pliku JSON - opcja w menu na ActionBar
-			* Przywracanie danych z pliku JSON - opcja w menu na ActionBar
-			* Sortowanie elementów listy według 3 kryteriów:
-				* Tytułu
-				* Daty stworzenia tasku
-				* Deadline'a
+	## Functionality:
+			* Adding new tasks - via a floatingButton
+			* Deleting finished task - via a left swipe on the list element
+			* Task editing - via a long click
+			* Backup to JSON - via the ActionBar menu option
+			* Restore from JSON - via the ActioNBar menu option
+			* Sorting elements by three different attributes
+				* Title
+				* Creation date
+				* Deadline
 			
 			
 
