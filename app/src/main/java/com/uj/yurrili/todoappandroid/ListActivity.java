@@ -245,10 +245,10 @@ public class ListActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_Back_up_export:
-                doImportExport(new ExportDateBaseToJSON(), "Export succeed");
+                doImportExport(new ExportDateBaseToJSON(), getResources().getString(R.string.action_back_up_export_succ_msg));
                 return true;
             case R.id.action_Back_up_import:
-                doImportExport(new ImportDateBaseFromJSON(), "Import succeed");
+                doImportExport(new ImportDateBaseFromJSON(), getResources().getString(R.string.action_back_up_import_succ_msg));
                 return true;
             case R.id.submenu_item1:
                 sortWay = 1;
