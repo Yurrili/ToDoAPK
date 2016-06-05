@@ -1,6 +1,10 @@
 package com.uj.yurrili.todoappandroid.db_managment.db_import_export;
 
 import android.content.Context;
+import android.os.Message;
+import android.support.design.widget.Snackbar;
+import android.util.JsonReader;
+import android.util.Log;
 
 import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelper;
 import com.uj.yurrili.todoappandroid.db_managment.DataBaseHelperImpl;
@@ -18,6 +22,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,66 +32,76 @@ import java.util.List;
  */
 public class ImportDateBaseFromJSON implements ImportExport {
 
-    public String loadJSONFromFile(Context mContext) {
-        String json = null;
-        try {
-            FileInputStream notes_xml = new FileInputStream(new File(android.os.Environment.getExternalStorageDirectory(), pathToFile));
-            byte fileContent[] = new byte[(int)notes_xml.available()];
-                //The information will be content on the buffer.
+    public List<Task> readJsonStream(InputStream in) throws IOException {
+        JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
+        List<Task> list = readTasksArray(reader);
+        reader.close();
+        return list;
+    }
 
-            notes_xml.read(fileContent);
+    public List<Task> readTasksArray(JsonReader reader) throws IOException {
+        List<Task> messages  = new ArrayList<>();
 
-            json = new String(fileContent);
-
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
+        reader.beginArray();
+        while (reader.hasNext()) {
+            messages.add(readTask(reader));
         }
-        return json;
+        reader.endArray();
+        return messages;
+    }
 
+    public Task readTask(JsonReader reader) throws IOException {
+        Task newTask = new Task();
+
+        reader.beginObject();
+        while (reader.hasNext()) {
+
+            String temp;
+            String name = reader.nextName();
+            if (name.equals(Entries.Task._ID)) {
+                newTask.setId(Integer.parseInt(reader.nextString()));
+            } else if (name.equals(Entries.Task.COLUMN_TITLE)) {
+                temp = reader.nextString();
+                Log.d("IMPORT", temp);
+                newTask.setTitle(temp);
+            } else if (name.equals(Entries.Task.COLUMN_DESCRIPTION)) {
+                temp = reader.nextString();
+                if (!temp.equals(""))
+                    newTask.setDescription(temp);
+            } else if (name.equals(Entries.Task.COLUMN_URL_TO_ICON)) {
+                temp = reader.nextString();
+                if (!temp.equals(""))
+                    newTask.setUrl_to_icon(temp);
+            } else if (name.equals(Entries.Task.COLUMN_TIME_END)) {
+                temp = reader.nextString();
+                if (!temp.equals(""))
+                    newTask.setTime_end(Long.parseLong(temp));
+            } else if (name.equals(Entries.Task.COLUMN_TIMESTAMP)) {
+                newTask.setCreate_at(new Timestamp(Long.parseLong(reader.nextString())));
+            } else {
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
+        return newTask;
     }
 
     @Override
-    public void moveDataBase(Context mContext) {
+    public boolean moveDataBase(Context mContext) {
         DataBaseHelper dba = new DataBaseHelperImpl(mContext);
 
-        String strJson = loadJSONFromFile(mContext);
-        List<Task> tasks = new ArrayList<>();
+        List<Task> tasks = null;
         try {
-
-           // JSONObject jsonRootObject = new JSONObject(strJson);
-            JSONArray jsonArray = new JSONArray(strJson);
-//            JSONArray jsonArray = new JSONArray(strJson);
-            //Get the instance of JSONArray that contains JSONObjects
-          //  JSONArray jsonArray = jsonRootObject.getJSONArray("Task");
-
-            //Iterate the jsonArray and print the info of JSONObjects
-            for(int i=0; i < jsonArray.length(); i++){
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                Task newTask = new Task();
-                newTask.setId(Integer.parseInt(jsonObject.optString(Entries.Task._ID)));
-                newTask.setTitle(jsonObject.optString(Entries.Task.COLUMN_TITLE));
-                String temp = jsonObject.optString(Entries.Task.COLUMN_DESCRIPTION);
-                if( !temp.equals("")) {
-                    newTask.setDescription(temp);
-                }
-                temp = jsonObject.optString(Entries.Task.COLUMN_URL_TO_ICON);
-                if( !temp.equals("")) {
-                    newTask.setUrl_to_icon(temp);
-                }
-                temp = jsonObject.optString(Entries.Task.COLUMN_TIME_END);
-                if( !temp.equals("")){
-                    newTask.setTime_end(Long.parseLong(temp));
-                }
-
-                newTask.setCreate_at(new Timestamp(jsonObject.optLong(Entries.Task.COLUMN_TIMESTAMP)));
-                tasks.add(newTask);
-            }
-
-        } catch (JSONException e) {e.printStackTrace();}
+            tasks = readJsonStream(new FileInputStream(new File(android.os.Environment.getExternalStorageDirectory(), pathToFile)));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
 
         dba.setTasksFromJson(tasks);
+        Log.d("IMPORT", "SUCCEDED");
+        return true;
+
     }
 }
 

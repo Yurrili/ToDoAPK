@@ -139,8 +139,9 @@ public class DataBaseHelperImpl extends SQLiteOpenHelper implements DataBaseHelp
             values.put(Entries.Task.COLUMN_URL_TO_ICON, task.getUrl_to_icon());
 
             dba.insert(Entries.Task.TABLE_NAME, null, values);
-            dba.close();
+
         }
+        dba.close();
     }
 
     @Override

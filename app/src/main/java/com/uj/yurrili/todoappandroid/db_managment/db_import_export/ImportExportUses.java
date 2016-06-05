@@ -18,8 +18,8 @@ public class ImportExportUses {
         this.ctx = ctx;
     }
 
-    public void doIt() throws MalformedURLException {
-        impExpStr.moveDataBase(ctx);
+    public boolean doIt() throws MalformedURLException {
+            return impExpStr.moveDataBase(ctx);
     }
 
 }

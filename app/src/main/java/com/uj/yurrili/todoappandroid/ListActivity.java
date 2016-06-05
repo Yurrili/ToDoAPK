@@ -136,47 +136,6 @@ public class ListActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        ImportExportUses impexpus = new ImportExportUses();
-        switch (id) {
-            case R.id.action_Back_up_export:
-                impexpus.setImpExpWayStr(new ExportDateBaseToJSON(), getApplicationContext());
-                try {
-                    impexpus.doIt();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-                return true;
-            case R.id.action_Back_up_import:
-                impexpus.setImpExpWayStr(new ImportDateBaseFromJSON(), getApplicationContext());
-                try {
-                    impexpus.doIt();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-                return true;
-            case R.id.submenu_item1:
-                tasks = sortManager.sort(new SortByTitle());
-                setmAdapter();
-                mAdapter.notifyDataSetChanged();
-                return true;
-            case R.id.submenu_item2:
-                tasks = sortManager.sort(new SortByTime());
-                setmAdapter();
-                mAdapter.notifyDataSetChanged();
-                return true;
-            case R.id.submenu_item3:
-                tasks = sortManager.sort(new SortByCreatedTime());
-                setmAdapter();
-                mAdapter.notifyDataSetChanged();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     public void showAlertDialog() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage(
@@ -254,5 +213,57 @@ public class ListActivity extends AppCompatActivity {
         };
 
         return new Pair<>(onClick,onLongClick);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        ImportExportUses impexpus = new ImportExportUses();
+        switch (id) {
+            case R.id.action_Back_up_export:
+                impexpus.setImpExpWayStr(new ExportDateBaseToJSON(), getApplicationContext());
+                try {
+                    if (impexpus.doIt()){
+                        Snackbar.make(mRecyclerView, "Export succeed", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    }
+                    tasks = dba_Task.getTasks();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                setmAdapter();
+                mAdapter.notifyDataSetChanged();
+                return true;
+            case R.id.action_Back_up_import:
+                impexpus.setImpExpWayStr(new ImportDateBaseFromJSON(), getApplicationContext());
+                try {
+                    if(impexpus.doIt()){
+                        Snackbar.make(mRecyclerView, "Import succeed" , Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    }
+                    tasks = dba_Task.getTasks();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+
+                setmAdapter();
+                mAdapter.notifyDataSetChanged();
+                return true;
+            case R.id.submenu_item1:
+                tasks = sortManager.sort(new SortByTitle());
+                setmAdapter();
+                mAdapter.notifyDataSetChanged();
+                return true;
+            case R.id.submenu_item2:
+                tasks = sortManager.sort(new SortByTime());
+                setmAdapter();
+                mAdapter.notifyDataSetChanged();
+                return true;
+            case R.id.submenu_item3:
+                tasks = sortManager.sort(new SortByCreatedTime());
+                setmAdapter();
+                mAdapter.notifyDataSetChanged();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
