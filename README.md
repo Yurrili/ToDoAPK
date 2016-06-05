@@ -38,6 +38,10 @@ Klaudia Olejniczak
 			* Edycja tasków - poprzez long clicka
 			* Back up danych do pliku JSON - opcja w menu na ActionBar
 			* Przywracanie danych z pliku JSON - opcja w menu na ActionBar
+			* Sortowanie elementów listy według 3 kryteriów:
+				* Tytułu
+				* Daty stworzenia tasku
+				* Deadline'a
 			
 			
 
