@@ -36,6 +36,8 @@ Klaudia Olejniczak
 			* Dodawanie nowych tasków - poprzez floatingButtona
 			* Usuwanie tasków zakończonych - porpzez swipe elementy listy
 			* Edycja tasków - poprzez long clicka
+			* Back up danych do pliku JSON - opcja w menu na ActionBar
+			* Przywracanie danych z pliku JSON - opcja w menu na ActionBar
 			
 			
 
