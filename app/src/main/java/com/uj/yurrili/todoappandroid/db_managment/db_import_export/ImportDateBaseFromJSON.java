@@ -1,6 +1,7 @@
 package com.uj.yurrili.todoappandroid.db_managment.db_import_export;
 
 import android.content.Context;
+import android.os.Environment;
 import android.os.Message;
 import android.support.design.widget.Snackbar;
 import android.util.JsonReader;
@@ -87,17 +88,10 @@ public class ImportDateBaseFromJSON implements ImportExport {
     }
 
     @Override
-    public boolean moveDataBase(Context mContext) {
+    public boolean moveDataBase(Context mContext) throws IOException {
         DataBaseHelper dba = new DataBaseHelperImpl(mContext);
-
         List<Task> tasks = null;
-        try {
-            tasks = readJsonStream(new FileInputStream(new File(android.os.Environment.getExternalStorageDirectory(), pathToFile)));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
+        tasks = readJsonStream(new FileInputStream(new File(Environment.getExternalStorageDirectory(), pathToFile)));
         dba.setTasksFromJson(tasks);
         Log.d("IMPORT", "SUCCEDED");
         return true;

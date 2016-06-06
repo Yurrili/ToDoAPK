@@ -1,13 +1,16 @@
 package com.uj.yurrili.todoappandroid;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -38,8 +41,12 @@ import com.uj.yurrili.todoappandroid.objects.sort.SortStrategy;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -62,6 +69,7 @@ public class ListActivity extends AppCompatActivity {
     private Task temp;
     private int position;
     private int sortWay;
+    private SharedPreferences sharedpreferences;
 
 
     @Override
@@ -71,12 +79,24 @@ public class ListActivity extends AppCompatActivity {
         initLibraries();
         setSupportActionBar(toolbar);
         dba_Task = new DataBaseHelperImpl(getApplicationContext());
+        sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (savedInstanceState != null) {
             sortWay = savedInstanceState.getInt("sort", 0);
         }
+
         initRecyclerView();
         initFloatingActionButton();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sharedpreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if(sharedpreferences != null) {
+            sortWay = sharedpreferences.getInt("sort", 0);
+        }
+        getSortStrategy();
     }
 
     private void initLibraries() {
@@ -105,7 +125,6 @@ public class ListActivity extends AppCompatActivity {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(createSimpleCall());
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
 
-
         try {
             if(tasks == null) {
                 tasks = dba_Task.getTasks();
@@ -113,18 +132,17 @@ public class ListActivity extends AppCompatActivity {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        setmAdapter();
+
         sortManager = new SortManager(tasks);
-        getSortStrategy();
+
 
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        // Make sure to call the super method so that the states of our views are saved
         super.onSaveInstanceState(outState);
-        // Save our own state now
         outState.putInt("sort", sortWay);
+
     }
 
     @Override
@@ -132,7 +150,17 @@ public class ListActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
             sortWay = savedInstanceState.getInt("sort", 0);
+        } else {
+            sortWay = 0;
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putInt("sort", sortWay);
+        editor.apply();
     }
 
     private void setmAdapter() {
@@ -279,6 +307,7 @@ public class ListActivity extends AppCompatActivity {
                 setSortTasks(new SortByCreatedTime());
                 break;
             default:
+                setmAdapter();
                 break;
         }
     }
@@ -292,7 +321,8 @@ public class ListActivity extends AppCompatActivity {
                 Snackbar.make(mRecyclerView, succ, Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
             tasks = dba_Task.getTasks();
-        } catch (MalformedURLException e) {
+        } catch (IOException e) {
+            Snackbar.make(mRecyclerView, "Something went wrong. Sorry", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             e.printStackTrace();
         }
         setmAdapter();

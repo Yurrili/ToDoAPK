@@ -13,6 +13,7 @@ import com.uj.yurrili.todoappandroid.db_managment.Entries;
 import com.uj.yurrili.todoappandroid.objects.Task;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -71,16 +72,9 @@ public class ExportDateBaseToJSON implements ImportExport {
 
 
     @Override
-    public boolean moveDataBase(Context mContext) throws MalformedURLException {
-
+    public boolean moveDataBase(Context mContext) throws IOException {
         DataBaseHelper dba = new DataBaseHelperImpl(mContext);
-
-        try {
-            writeJsonStream(new FileOutputStream(new File(Environment.getExternalStorageDirectory(), pathToFile), false),dba.getTasks());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        writeJsonStream(new FileOutputStream(new File(Environment.getExternalStorageDirectory(), pathToFile), false),dba.getTasks());
         Log.d("EXPORT", "SUCCEDED");
         return true;
     }

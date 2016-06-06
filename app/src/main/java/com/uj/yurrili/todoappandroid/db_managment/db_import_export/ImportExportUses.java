@@ -2,6 +2,7 @@ package com.uj.yurrili.todoappandroid.db_managment.db_import_export;
 
 import android.content.Context;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 /**
@@ -18,7 +19,7 @@ public class ImportExportUses {
         this.ctx = ctx;
     }
 
-    public boolean doIt() throws MalformedURLException {
+    public boolean doIt() throws IOException {
             return impExpStr.moveDataBase(ctx);
     }
 

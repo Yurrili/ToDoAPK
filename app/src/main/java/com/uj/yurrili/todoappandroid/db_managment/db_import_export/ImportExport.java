@@ -2,6 +2,8 @@ package com.uj.yurrili.todoappandroid.db_managment.db_import_export;
 
 import android.content.Context;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 /**
@@ -9,5 +11,5 @@ import java.net.MalformedURLException;
  */
 public interface ImportExport {
     String pathToFile = "backUp_ToDo_f.json";
-    boolean moveDataBase(Context mContext) throws MalformedURLException;
+    boolean moveDataBase(Context mContext) throws IOException;
 }
