@@ -61,7 +61,6 @@ public class ListActivity extends AppCompatActivity {
     Toolbar toolbar;
     @InjectView(R.id.empty_view)
     TextView emptyView;
-    SortManager sortManager;
     private List<Task> tasks;
 
     private RecyclerView.Adapter mAdapter;
@@ -132,9 +131,6 @@ public class ListActivity extends AppCompatActivity {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
-        sortManager = new SortManager(tasks);
-
 
     }
 
@@ -325,12 +321,13 @@ public class ListActivity extends AppCompatActivity {
             Snackbar.make(mRecyclerView, "Something went wrong. Sorry", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             e.printStackTrace();
         }
-        setmAdapter();
+        getSortStrategy();
         mAdapter.notifyDataSetChanged();
     }
 
 
     private void setSortTasks(SortStrategy sort){
+        SortManager sortManager = new SortManager(tasks);
         tasks = sortManager.sort(sort);
         setmAdapter();
         mAdapter.notifyDataSetChanged();

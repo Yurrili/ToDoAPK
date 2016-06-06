@@ -14,6 +14,10 @@ public class SortManager {
         this.items = items;
     }
 
+    public void setTasks(List<Task> items){
+        this.items = items;
+    }
+
     public List<Task> sort(SortStrategy strategy){
         return strategy.sort(items);
     }
